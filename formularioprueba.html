@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>pagina de gastos</title>
+</head>
+<body>
+	<h1>Paginita de gasto</h1>
+	<form id="formulario">
+		transaccion--
+		<div class="contenedor">
+		<label for="idIngreso">Ingreso</label>
+		<input id="idIngreso" type="radio" name="radios1" value="ingreso">
+		<label for="idEgreso">Egreso</label>
+		<input id="idEgreso" type="radio" name="radios1" value="egreso">
+		</div>
+		<div class="contenedor">
+		<label for="descrip">Descripcion</label>
+		<input id="descrip" placeholder="Descripcion" name="descrip1">
+		</div>
+		<div class="contenedor">
+		<label for="monto">Monto</label>
+		<input id="monto" placeholder="Monto" type="number" name="monto1">
+		</div>
+		<div class="contenedor">
+		<label for="cate">Categoria</label>
+		<input id="cate" placeholder="Categoria" name="cate1">
+		</div>
+
+		<div>
+			<button id="botoncito">Iniciar</button>
+		</div>
+	</form>
+	<div class="tablaDiv">
+		<table id="tablaTrato">
+			<tr>
+			<th> Titulo </th>
+			<th> Descripcion </th>
+			<th> Monto </th>
+			<th> Categoria </th>
+			</tr>
+		</table>	
+	</div>
+
+	<script>
+		const form = document.getElementById("formulario");
+		
+
+		form.addEventListener("submit",function (event){
+		event.preventDefault();
+
+		let transactionFormData = new FormData(form);
+		let transactionObj = convertFormDataToTransactionObj (transactionFormData);
+		saveTransactionData (transactionObj)
+		insertRowInTransactionTable (transactionObj)
+		form.reset();
+		})
+
+		document.addEventListener("DOMContentLoaded", function(event){
+			let transactionObjArr = JSON.parse(localStorage.getItem("transactionData"));
+			transactionObjArr.forEach(element => insertRowInTransactionTable(element));
+			
+		})
+
+		function convertFormDataToTransactionObj(transactionFormData){
+			let radios1 = transactionFormData.get("radios1")
+			let descrip1 = transactionFormData.get("descrip1")
+			let monto1 = transactionFormData.get("monto1")
+			let cate1 = transactionFormData.get("cate1")
+		return {
+			"radios1":radios1,
+			"descrip1":descrip1,
+			"monto1":monto1,
+			"cate1":cate1
+			}
+		}
+
+		
+		
+		function insertRowInTransactionTable (transactionObj) {
+		let myTableRef = document.getElementById("tablaTrato");
+		let newRow = myTableRef.insertRow(-1);
+
+		let newCell = newRow.insertCell(0);
+		newCell.innerText = transactionObj.radios1;
+
+		newCell = newRow.insertCell(1);
+		newCell.innerText = transactionObj.descrip1;
+
+		newCell = newRow.insertCell(2);
+		newCell.innerText = transactionObj.monto1;
+
+		newCell = newRow.insertCell(3);
+		newCell.innerText = transactionObj.cate1;
+		};
+
+		function saveTransactionData(transactionObj) {
+		let myTransactionArray = JSON.parse(localStorage.getItem("transactionData")) || [];
+		myTransactionArray.push(transactionObj)
+		let transactionArrayJSON = JSON.stringify(myTransactionArray) ;
+		localStorage.setItem("transactionData", transactionArrayJSON)
+		
+		};
+
+		
+
+	</script>
+	<style>
+		h1{
+			text-align: center;
+		}
+		form{
+			text-align: center;
+		}
+		#botoncito{
+			font-size: larger;
+		}
+		.contenedor{
+			margin: 10px 0px 10px 0px;
+		}
+
+		.tablaDiv {
+			margin: 20px;
+			background-color: grey;
+		}
+
+		table{
+			margin: auto;
+			border-collapse: separate;
+			border: 1px solid rgb(129, 12, 12);
+			text-align: center;
+		}
+
+		th, td{
+			padding: 20px;
+			border: 1px solid rgb(194, 79, 26);
+		}
+	</style>
+</body>
+</html>
