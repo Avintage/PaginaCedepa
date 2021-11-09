@@ -40,6 +40,7 @@
 			<th> Descripcion </th>
 			<th> Monto </th>
 			<th> Categoria </th>
+			<th> Eliminar </th>
 			</tr>
 		</table>	
 	</div>
@@ -59,21 +60,32 @@
 		})
 
 		document.addEventListener("DOMContentLoaded", function(event){
-			let transactionObjArr = JSON.parse(localStorage.getItem("transactionData"));
+			let transactionObjArr = JSON.parse(localStorage.getItem("transactionData"))
+			transactionObjArr===null ? 
+			[]:
 			transactionObjArr.forEach(element => insertRowInTransactionTable(element));
-			
 		})
+
+		function getTransactionId(){
+			let lastTransactionId = localStorage.getItem("id1") || "-1";
+			let newTransactionId = JSON.parse(lastTransactionId) + 1;
+			localStorage.setItem("id1", JSON.stringify(newTransactionId))
+			return newTransactionId;
+			
+		}
 
 		function convertFormDataToTransactionObj(transactionFormData){
 			let radios1 = transactionFormData.get("radios1")
 			let descrip1 = transactionFormData.get("descrip1")
 			let monto1 = transactionFormData.get("monto1")
 			let cate1 = transactionFormData.get("cate1")
+			let id1 = getTransactionId()
 		return {
 			"radios1":radios1,
 			"descrip1":descrip1,
 			"monto1":monto1,
-			"cate1":cate1
+			"cate1":cate1,
+			"id1":id1
 			}
 		}
 
@@ -94,6 +106,15 @@
 
 		newCell = newRow.insertCell(3);
 		newCell.innerText = transactionObj.cate1;
+
+		let newDeleteCell = newRow.insertCell(4);
+		let deleteButton = document.createElement("button");
+		deleteButton.innerText = "Eliminar";
+		newDeleteCell.appendChild(deleteButton);
+
+		deleteButton.addEventListener("click", (evento)=>{
+			evento.target.parentNode.parentNode.remove()
+		})
 		};
 
 		function saveTransactionData(transactionObj) {
