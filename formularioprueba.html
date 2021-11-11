@@ -66,6 +66,8 @@
 			transactionObjArr.forEach(element => insertRowInTransactionTable(element));
 		})
 
+		
+
 		function getTransactionId(){
 			let lastTransactionId = localStorage.getItem("id1") || "-1";
 			let newTransactionId = JSON.parse(lastTransactionId) + 1;
@@ -114,7 +116,24 @@
 
 		deleteButton.addEventListener("click", (evento)=>{
 			evento.target.parentNode.parentNode.remove()
+			let transactionId = newRow.getAttribute("data-transaction-id");
+			newRow.remove();
+			deleteTransactionObj(transactionId)
 		})
+		};
+
+			//se le pasa el parametro transactionId
+		function deleteTransactionObj(transactionId) {
+			//Obtengo las transacciones del localstorage 
+			let transactionObjArr = JSON.parse(localStorage.getItem("transactionData"));
+			//Busco en el indice del array la posicion de la transaccion para eliminarla
+			let transactionIndexInArray = transactionObjArr.findIndex(element => element.transactionId === transactionId);
+			//Elimino el elemento de esa posicion
+			transactionObjArr.splice(transactionIndexInArray, 1);
+			//Lo convierto en objeto JSON
+			let transactionArrayJSON = JSON.stringify(transactionObjArr);
+			//Guardo en el localstorage con formato JSON
+			localStorage.setItem("transactionData", transactionArrayJSON)
 		};
 
 		function saveTransactionData(transactionObj) {
