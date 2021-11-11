@@ -1,0 +1,29 @@
+h1{
+	text-align: center;
+}
+form{
+	text-align: center;
+}
+#botoncito{
+	font-size: larger;
+}
+.contenedor{
+	margin: 10px 0px 10px 0px;
+}
+
+.tablaDiv {
+	margin: 20px;
+	background-color: grey;
+}
+
+table{
+	margin: auto;
+	border-collapse: separate;
+	border: 1px solid rgb(129, 12, 12);
+	text-align: center;
+}
+
+th, td{
+	padding: 20px;
+	border: 1px solid rgb(194, 79, 26);
+}
